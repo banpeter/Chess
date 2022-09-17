@@ -4,8 +4,8 @@
 int validate(int x,int y,int table);
 
 int validate(int x,int y,int table){
-    
-    if(x<=8 && x>=0 && y<=8 && y>=0 && !table){
+    //printf("%i %i %i\n",x,y,table);
+    if(x<8 && x>=0 && y<8 && y>=0 && table==0){
         return 1;
     }
     return 0;
@@ -70,40 +70,44 @@ int main()
     //after that we evaluate how many steps we can take after that
     //we choose the biggest value
 
-    while(c!=0){
+    while(c!=64){
+
         table[x][y]=1;
         // for every coodinates we go through all the possible moves
-        fail=1;
-        for(int i=0;i<=8;i++){
+        fail=0;
+        for(int i=0;i<8;i++){
 
             temp_x = x+moves[i][0];
             temp_y = y+moves[i][1];
-            if(validate(temp_x,temp_y,table[x][y])){
+            //table might return error if the indexes are invalid
+            if(validate(temp_x,temp_y,table[temp_x][temp_y])){
                     //temp
                     temp_cor[i][0] = temp_x;
                     temp_cor[i][1] = temp_y;
-                    fail=0;
+                    fail=1;
             }
             else{
                 temp_cor[i][0] = -1;
                 temp_cor[i][1] = -1;
             }
         }
+        
         //if we found a possible move it does not fail and can take the next step
         //othrewise it program stops
-        if(fail){
+        if(fail==0){
+            printf("bruh\n");
             return 0;
         }
 
         //evaluate temp_moves and choose the largest
         //go through the temp_moves with the same algorithm
         max=0;
-        for(int j=0;j<=8;j++){//check all the temporary coordinates
+        for(int j=0;j<8;j++){//check all the temporary coordinates
             count=0;
             for(int k=0;k<=8;k++){//moves
                 temp_x = temp_cor[j][0]+moves[k][0];
                 temp_y = temp_cor[j][1]+moves[k][1];
-                if(validate(temp_x,temp_y,table[x][y])){
+                if(validate(temp_x,temp_y,table[temp_x][temp_y])){
                         count++;
                 }
             }
@@ -113,8 +117,10 @@ int main()
             }
             
         }
+        //printf("second\n");
         //taking the next step
-        printf("%i %i\n",x,y);
+        printf("%i %i\n",x+1,y+1);
+        //printf("%i\n",c);
         x=temp_cor[nom][0];
         y=temp_cor[nom][1];
         c++;
