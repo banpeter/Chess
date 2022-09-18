@@ -6,7 +6,7 @@ int validate(int x,int y,int table);
 int validate(int x,int y,int table){
     //printf("%i %i %i\n",x,y,table);
     if(x<8 && x>=0 && y<8 && y>=0 && table==0){
-        //printf("%i %i\n",x,y);
+        //printf("%i %i***\n",x,y);
         return 1;
     }
     return 0;
@@ -59,7 +59,7 @@ int main()
         {0,0},
     };
     //our x,y coordinates 
-    int x=4,y=4;
+    int x=0,y=0;
     
     //temporary coordinates so we can check the future steps
     int temp_x,temp_y;
@@ -74,7 +74,7 @@ int main()
     while(c!=65){
 
         
-        table[x][y]=1;
+        
         // for every coodinates we go through all the possible moves
         fail=0;
         for(int i=0;i<8;i++){
@@ -96,9 +96,16 @@ int main()
         }
         
         //if we found a possible move it does not fail and can take the next step
-        //othrewise it program stops
+        //otherwise the program stops
         if(fail==0){
-            printf("bruh\n");
+            printf("end\n");
+            table[x][y]=1;
+            for(int g=0;g<8;g++){
+                for(int h=0;h<8;h++){
+                    printf("%i ",table[g][h]);
+                }
+                printf("\n");
+            }
             return 0;
         }
 
@@ -118,30 +125,35 @@ int main()
                 }
                 
             }
-            
             if(count<min && count>0){
-                min=count;
-                nom=j;
-                
+                    min=count;
+                    nom=j;
+                    
             }
+
+
+                
             
         }
-        //printf("second\n");
         //taking the next step
        
-        //printf("%i\n",c);
-        //
-        printf(" %i %i %i\n",x+1,y+1,c);
+
+        table[x][y]=1;
         x=temp_cor[nom][0];
         y=temp_cor[nom][1];
-
-        /*for(int g=0;g<8;g++){
+        //printf(" %i %i %i\n",x+1,y+1,c);
+        
+        for(int g=0;g<8;g++){
             for(int h=0;h<8;h++){
                 printf("%i ",table[g][h]);
             }
             printf("\n");
         }
-        printf("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\n");*/
+        /*for(int i=0;i<8;i++){
+            printf("%i %i\n",temp_cor[i][0],temp_cor[i][1]);
+        }*/
+        printf(" %i %i %i\n",x+1,y+1,c);
+        printf("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\n");
         
         c++;
 
