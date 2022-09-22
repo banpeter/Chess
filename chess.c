@@ -1,9 +1,18 @@
 #include <stdio.h>
 #include <string.h>
 
+#define ANSI_COLOR_RED     "\x1b[31m"
+#define ANSI_COLOR_RESET   "\x1b[0m"
+#define ANSI_COLOR_GREEN   "\x1b[32m"
+#define ANSI_COLOR_BLUE    "\x1b[34m"
+
 //calculated values
 int validate(int x,int y,int table);
 int test(int all_steps[63][2],int k);
+int solve(int table[8][8],int moves[8][2],int temp_cor[8][2],int all_steps[63][2],int x,int y,int t);
+int show_board(int table[8][8],int x, int y);
+
+
 int validate(int x,int y,int table){
     //printf("%i %i %i\n",x,y,table);
     if(x<8 && x>=0 && y<8 && y>=0 && table==0){
@@ -62,21 +71,17 @@ int main()
         {0,0},
     };
 
-    int all_steps[63][2];
+   
 
     //our x,y coordinates 
     int x=0,y=0;
     
-    //temporary coordinates so we can check the future steps
-    int temp_x,temp_y;
-    int c=0;
-    int fail = 1;
+    int all_steps[63][2];
+
+
     int counter=0;
     //largest moves
-    int min,count,nom=0;//nom=number of move = index of move
-    //we check all the next move possible
-    //after that we evaluate how many steps we can take after that
-    //we choose the biggest value
+    
     int t;
     printf("Would you like to run the test?(0/1): ");
     scanf("%d",&t);
@@ -86,22 +91,108 @@ int main()
         x=x-1;
         y=y-1;
     }
+    if(t){
+        for(int a=0;a<8;a++){
+            for(int b=0;b<8;b++){
+                if(t){
+                    x=a;
+                    y=b;
+                }
+                counter++;
+                if(counter==45){
+                    printf("%i\n",a+1);
+                    printf("%i\n",b+1);
+                }
+                
+                solve(table,moves,temp_cor,all_steps,x,y,t);
+                
+                memset(table,0,8*8*sizeof (int));
+                test(all_steps,counter);
+                memset(all_steps,0,63*2*sizeof (int));
 
-    for(int a=0;a<8;a++){
-        for(int b=0;b<8;b++){
-            if(t){
-                x=a;
-                y=b;
+                
             }
             
-            counter++;
-            memset(table,0,8*8*sizeof (int));
+        }
+        
+    }
+    else{
+        
+        solve(table,moves,temp_cor,all_steps,x,y,t);
 
+    }
+    return 0;
+}
+
+
+//test
+int test(int all_steps[63][2],int k){
+
+    int same=-1;
+    int f = 0;
+
+    for(int i=0;i<63;i++){
+        same=-1;
+        
+        for(int j=0;j<63;j++){
+            if(all_steps[i][0]==all_steps[j][0] && all_steps[i][1]==all_steps[j][1]){
+                
+                same++;
+            }
+        }
+        if(same){
+            f++;
+            break;
+        }
+        
+    }
+    if(f){
+            printf("%i Fail!\n",k);
+        }
+        else{
+            printf("%i Succes!\n",k);
+        }
+    return 1;
+
+}
+int show_board(int table[8][8],int x, int y){
+
+    for(int g=0;g<8;g++){
+        for(int h=0;h<8;h++){
+            if(g==x && h==y){
+                printf(ANSI_COLOR_RED "[%i] "ANSI_COLOR_RESET,table[g][h]);
+            }
+            else{
+                printf(ANSI_COLOR_BLUE "[%i] "ANSI_COLOR_RESET ,table[g][h]);
+            }
+             
+
+        }
+        printf("\n");
+        }
+    printf("Current position: %i %i\n",x+1,y+1);
+
+}
+
+int solve(int table[8][8],int moves[8][2],int temp_cor[8][2],int all_steps[63][2],int x,int y,int t){
+
+            
+
+            //temporary coordinates so we can check the future steps
+            int temp_x,temp_y;
+            int c=0;
+            int fail = 1;
+
+            int min,count,nom=0;//nom=number of move = index of move
+            //we check all the next move possible
+            //after that we evaluate how many steps we can take after that
+            //we choose the biggest value
             while(c!=65){
             
 
             all_steps[c][0]=x;
             all_steps[c][1]=y;
+
             // for every coodinates we go through all the possible moves
             fail=0;
             for(int i=0;i<8;i++){
@@ -125,16 +216,14 @@ int main()
             //if we found a possible move it does not fail and can take the next step
             //otherwise the program stops
             if(fail==0){
-                printf("end\n");
+                
                 table[x][y]=1;
-                for(int g=0;g<8;g++){
-                    for(int h=0;h<8;h++){
-                        printf("%i ",table[g][h]);
-                    }
-                    printf("\n");
+                if(!t){
+                    printf("end\n");
+                    show_board(table,x,y);
                 }
-                break;//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                //return 0;
+                
+                return 0;
             }
 
             //evaluate temp_moves and choose the largest
@@ -165,75 +254,19 @@ int main()
             table[x][y]=1;
             x=temp_cor[nom][0];
             y=temp_cor[nom][1];
-            //printf(" %i %i %i\n",x+1,y+1,c);
-            
-            
-            /*for(int i=0;i<8;i++){
-                printf("%i %i\n",temp_cor[i][0],temp_cor[i][1]);
-            }*/
-            /*printf(" %i %i %i\n",x+1,y+1,c);
-            printf("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\n");*/
+
             
             c++;
             if(!t){
-            for(int g=0;g<8;g++){
-                for(int h=0;h<8;h++){
-                    printf("%i ",table[g][h]);
+                    show_board(table,x,y);
                 }
-                printf("\n");
             }
-            printf(" %i %i %i\n",x+1,y+1,c);
-            printf("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\n");
-            }
+            return 1;
 
         }
-        /*if(t){
-            for(int g=0;g<8;g++){
-                for(int h=0;h<8;h++){
-                    printf("%i ",table[g][h]);
-                }
-                printf("\n");
-            }
-            printf(" %i %i %i\n",x+1,y+1,c);
-            printf("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\n");
-            }*/
-        test(all_steps,counter);
 
-        if(!t){break;}
-            
-        }
-        if(!t){break;}
-    }
 
-    return 0;
-}
 
-//test
-int test(int all_steps[63][2],int k){
 
-    int same=-1;
-    int f = 0;
-
-    for(int i=0;i<63;i++){
-        same=-1;
-        for(int j=0;j<63;j++){
-            if(all_steps[i][0]==all_steps[j][0] && all_steps[i][1]==all_steps[j][1]){
-                same++;
-            }
-        }
-        if(same){
-            f++;
-            break;
-        }
-        
-    }
-    if(f){
-            printf("%i Fail!\n",k);
-        }
-        else{
-            printf("%i Succes!\n",k);
-        }
-
-}
 
 //create an array for checking for all the coordinates if it really solved the problem
