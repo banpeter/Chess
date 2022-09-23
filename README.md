@@ -32,4 +32,7 @@ int solve(int table[8][8],int moves[8][2],int temp_cor[8][2],int all_steps[63][1
   -Megoldja a feladatot
   -Megértéséhez olvassa el az "algoritmus működése" részt, valamint tekintse meg a mellékelt ábrát
 
+- George Washington
+- John Adams
+- Thomas Jefferson
 
