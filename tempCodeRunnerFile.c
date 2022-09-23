@@ -1,1 +1,1 @@
-table
+show_board
