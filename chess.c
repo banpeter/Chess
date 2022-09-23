@@ -8,9 +8,10 @@
 
 //calculated values
 int validate(int x,int y,int table);
-int test(int all_steps[63][2],int k);
-int solve(int table[8][8],int moves[8][2],int temp_cor[8][2],int all_steps[63][2],int x,int y,int t);
+int test(int all_steps[63][10][2],int k);
+int solve(int table[8][8],int moves[8][2],int temp_cor[8][2],int all_steps[63][10][2],int x,int y,int t);
 int show_board(int table[8][8],int x, int y);
+int prev(int all_steps[63][10][2],int c,int x,int y);
 
 
 int validate(int x,int y,int table){
@@ -76,7 +77,7 @@ int main()
     //our x,y coordinates 
     int x=0,y=0;
     
-    int all_steps[63][2];
+    int all_steps[63][10][2];
 
 
     int counter=0;
@@ -99,16 +100,13 @@ int main()
                     y=b;
                 }
                 counter++;
-                if(counter==45){
-                    printf("%i\n",a+1);
-                    printf("%i\n",b+1);
-                }
+
                 
                 solve(table,moves,temp_cor,all_steps,x,y,t);
                 
                 memset(table,0,8*8*sizeof (int));
                 test(all_steps,counter);
-                memset(all_steps,0,63*2*sizeof (int));
+                memset(all_steps,0,63*10*2*sizeof (int));
 
                 
             }
@@ -126,7 +124,7 @@ int main()
 
 
 //test
-int test(int all_steps[63][2],int k){
+int test(int all_steps[63][10][2],int k){
 
     int same=-1;
     int f = 0;
@@ -170,11 +168,12 @@ int show_board(int table[8][8],int x, int y){
         }
         printf("\n");
         }
-    printf("Current position: %i %i\n",x+1,y+1);
+    printf("Current position: %i %i\n",x,y);
+    printf("\n////////////////////////////////////////////\n");
 
 }
 
-int solve(int table[8][8],int moves[8][2],int temp_cor[8][2],int all_steps[63][2],int x,int y,int t){
+int solve(int table[8][8],int moves[8][2],int temp_cor[8][2],int all_steps[63][10][2],int x,int y,int t){
 
             
 
@@ -182,19 +181,25 @@ int solve(int table[8][8],int moves[8][2],int temp_cor[8][2],int all_steps[63][2
             int temp_x,temp_y;
             int c=0;
             int fail = 1;
+            int found;
 
             int min,count,nom=0;//nom=number of move = index of move
             //we check all the next move possible
             //after that we evaluate how many steps we can take after that
             //we choose the biggest value
-            while(c!=65){
+            while(c<64){//65
             
 
-            all_steps[c][0]=x;
-            all_steps[c][1]=y;
+            all_steps[c][0][0]=x;
+            all_steps[c][0][1]=y;
 
+            /*for(int v=0;v<5;v++){
+                    printf("%d %d\n",all_steps[c][v][0],all_steps[c][v][1]);
+                }
+            */
             // for every coodinates we go through all the possible moves
             fail=0;
+            //printf("%i %i dhkfgaskhdfgaksdfgahlksd",x,y);
             for(int i=0;i<8;i++){
 
                 temp_x = x+moves[i][0];
@@ -217,19 +222,97 @@ int solve(int table[8][8],int moves[8][2],int temp_cor[8][2],int all_steps[63][2
             //otherwise the program stops
             if(fail==0){
                 
-                table[x][y]=1;
-                if(!t){
-                    printf("end\n");
-                    show_board(table,x,y);
-                }
+                //itt kell varázsolni
+                printf("///////////////////////////////////////////////////////////////////////////////////////////////\n");
+                //////////////////////////////////////////////A C megfelelő használata
+                int finished = 0;
+                do{
+                    
+                    printf("problem\n");
+                    if(x==-1 && y==-1){
+                            return 0;
+                    }
+                    if(all_steps[c][9][0]>1 && all_steps[c][9][1]!=all_steps[c][9][0]){///////////////////////////////////////////////////////////
+                        //vegig kell turatni
+                        //megnézem van-e 1-nél tobb min
+                        //ha igen ugrani kell a kovetkezőre
+                        printf("1\n");
+                        printf("%i asdasdasdasd\n",c);
+                        
+                        printf("%i bbbbbbbbbbbb\n",all_steps[c][9][0]);
+                        for(int z=1;z<all_steps[c][9][0];z++){
+                            //printf("%i %i\n",all_steps[c-1][1][0],all_steps[c-1][1][1]);
+                            printf("2\n");
+                            show_board(table,all_steps[c][0][0],all_steps[c][0][1]);
+                            for(int v=1;v<=all_steps[c][9][0];v++){
+                            printf("%d %d\n",all_steps[c][v][0],all_steps[c][v][1]);
+                            }
+                            //meg kell nézni hogy mit választott és az alapján megnézni
+
+                            printf("%d %d ++++++++\n",all_steps[c][0][0],all_steps[c][0][1]);//itt van
+                            //table[all_steps[c+1][0][0]][all_steps[c+1][0][1]]=0;
+                            printf("%d %d ++++++++\n",all_steps[c+1][0][0],all_steps[c+1][0][1]);//itt lesz
+
+                            //meg kell allapítani hogy a kovetkezoben melyik
+                            //itt allitja at -1-re
+                            if(all_steps[c][z][0]=all_steps[c+1][0][0] && all_steps[c][z][1]==all_steps[c+1][0][1]){
+                                printf("3\n");
+                                all_steps[c][9][1] +=1;
+
+                                all_steps[c][z][0]=-1;
+                                all_steps[c][z][1]=-1;
+
+                                
+
+                                x=all_steps[c][z+1][0];
+                                y=all_steps[c][z+1][1];
+                                printf("%d %d ++++++++\n",x,y);
+                                //???????
+                                all_steps[c+1][0][0]=x;
+                                all_steps[c+1][0][1]=y;
+                                //terkepen 0
+                                //c--;
+                                
+                                finished=1;
+                                printf("3\n");
+                                
+                                show_board(table,x,y);
+                                break;
+                                
+                                
+                            }
+                        }
+                    }
+                    else{
+                        printf("4\n");
+                        //previous step set to 0
+                        table[all_steps[c-1][0][0]][all_steps[c-1][0][1]] = 0;
+                        c--;
+                        //töröljuk a jelenlegi koordinátát vagy csak vissza ugrunk1-et
+                        //vissza lepunk egyet
+                    }
+
+
+                }while(!finished);///////////////////////////////////////
+                printf("5\n");
+                printf("%i %i\n",x,y);
+             
+         
+                //table[x][y]=0;
+
+                //return 0;
                 
-                return 0;
+                
             }
+            /*else{
+
+            }*/
 
             //evaluate temp_moves and choose the largest
             //go through the temp_moves with the same algorithm
+            if(fail){
             min=100;
-        
+            found=0;
             for(int j=0;j<8;j++){//check all the temporary coordinates
                 count=0;
                 for(int k=0;k<8;k++){//moves
@@ -246,20 +329,45 @@ int solve(int table[8][8],int moves[8][2],int temp_cor[8][2],int all_steps[63][2
                         min=count;
                         nom=j;
                         
+                }
+                //ez csak akkor fussson le ha nem fail-elt
+                if(count<=min && count>0){
+                        found++;
+                        all_steps[c][found][0]=temp_cor[j][0];
+                        all_steps[c][found][1]=temp_cor[j][1];
+    
+                        all_steps[c][9][0]=found;
+                        all_steps[c][9][1]=1;      
                 }            
+            }
             }
             //taking the next step
         
-
-            table[x][y]=1;
-            x=temp_cor[nom][0];
-            y=temp_cor[nom][1];
-
+            if(fail){
+                printf("%i ggggggggggggggggggggggggggggggg\n",c);
+                table[x][y]=c+1;
+                x=temp_cor[nom][0];
+                y=temp_cor[nom][1];
+            }
             
-            c++;
+
+            if(fail){
+                //printf("%i ggggggggggggggggggggggggggggggg\n",c);
+                c++;
+                all_steps[c][9][0]=0;
+            }
+            
+
             if(!t){
-                    show_board(table,x,y);
+                printf("bruh\n");
+                show_board(table,x,y);
                 }
+            if(c==63){
+               return 1; 
+            } 
+            }
+            if(c==63){
+               return 1; 
             }
             return 1;
 
