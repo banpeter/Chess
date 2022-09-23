@@ -14,12 +14,12 @@ Pl.:5 7
 ### int validate(int x,int y,int table)
 
   - A validate függvénynek át kell adni  x és y értékeket valamint a tábla egy adott pontját.
-  - A függvény leellenörzi hogy x és y kissebek-e 8-nál.-Ezen felül leelenörzi hogy a tábla adott pontján jártunk-e már
+  - A függvény leellenörzi hogy x és y kissebek-e 8-nál.Ezen felül leelenörzi hogy a tábla adott pontján jártunk-e már
 
 ### int test(int all_steps[63][10][2],int k);
 
   - A test függvénynek át kell adni egy 3 dimenziós tömböt valamint egy integert.
-  - Az integer az jelzi hogy hanyadik teszt fut le.
+  - Az integer azt jelzi hogy hányadik teszt fut le.
   - Az all_steps minden érintet koordinátát tartalmaz és leteszteli hogy mindegyik csak egyszer szerepel-e
 
 ### int show_board(int table[8][8],int x, int y);
@@ -34,13 +34,13 @@ Pl.:5 7
 
 ## Algoritmus működése:
 
-Egy 2d tömbként ábrázolom a sakk táblát. '0'-val jelölöm azokat helyeket ahol még nem jártam. Ahova beléptem azt amezőt átírom az adott kör számára, így
+Egy 2d tömbként ábrázolom a sakk táblát. '0'-val jelölöm azokat helyeket ahol még nem jártam. Ahova beléptem azt a mezőt átírom az adott kör számára, így
 jól követhetó hogy melyik körben hova lépett.
 
 Egy másik tömbön belül tároljuk a lépéseket amelyek szabályosak
 
 Minden körben megállapítjuk hogy melyek lehetnek a következő lépések. Ezeket a "temp_cor" tömbben tároljuk.
-Ezt követően megnézzük hogy ezekről a helyekről hova lehetne tovább lépni és ezt magszámoljuk a legkissebeket pedi eltároljuk.
+Ezt követően megnézzük hogy ezekről a helyekről hova lehetne tovább lépni és ezt megszámoljuk a legkissebeket pedig eltároljuk.
 A következő körben pedig a legkissebek közül az elsőt kiválasztjuk és odalépünk. 
 
 Amennyiben nem lehet tovább lépni abban az esetben visszakeresükk azt a korábbi koordinátát ahol több lehetséges irányt tudtunk volna választani.
