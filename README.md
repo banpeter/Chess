@@ -13,9 +13,7 @@ Függvények:
 
 int validate(int x,int y,int table)
 
-  -A validate függvénynek át kell adni a x és y értékeket valamint a tábla egy adott pontját.
-  -A függvény leellenörzi hogy x és y kissebek-e 8-nál.
-  -Ezen felül leelenörzi hogy a tábla adott pontján jártunk-e már
+  -A validate függvénynek át kell adni a x és y értékeket valamint a tábla egy adott pontját.-A függvény leellenörzi hogy x és y kissebek-e 8-nál.-Ezen felül leelenörzi hogy a tábla adott pontján jártunk-e már
 
 int test(int all_steps[63][10][2],int k);
 
