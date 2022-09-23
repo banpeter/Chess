@@ -11,20 +11,6 @@ int validate(int x,int y,int table);
 int test(int all_steps[63][10][2],int k);
 int solve(int table[8][8],int moves[8][2],int temp_cor[8][2],int all_steps[63][10][2],int x,int y,int t);
 int show_board(int table[8][8],int x, int y);
-int prev(int all_steps[63][10][2],int c,int x,int y);
-
-
-int validate(int x,int y,int table){
-
-    if(x<8 && x>=0 && y<8 && y>=0 && table==0){
-
-        return 1;
-    }
-    return 0;
-}
-
-
-
 
 
 int main()
@@ -88,7 +74,7 @@ int main()
     printf("Would you like to run the test?(0/1): ");
     scanf("%d",&t);
     if(!t){
-        printf("Choose a starting position(x,y):");
+        printf("Choose a starting position(x y):");
         scanf("%d %d",&x,&y);
         x=x-1;
         y=y-1;
@@ -135,7 +121,7 @@ int test(int all_steps[63][10][2],int k){
         same=-1;
         
         for(int j=0;j<63;j++){
-            if(all_steps[i][0]==all_steps[j][0] && all_steps[i][1]==all_steps[j][1]){
+            if(all_steps[i][0][0]==all_steps[j][0][0] && all_steps[i][0][1]==all_steps[j][0][1]){
                 
                 same++;
             }
@@ -178,6 +164,16 @@ int show_board(int table[8][8],int x, int y){
     printf("\n////////////////////////////////////////////\n");
 
 }
+
+int validate(int x,int y,int table){
+
+    if(x<8 && x>=0 && y<8 && y>=0 && table==0){
+
+        return 1;
+    }
+    return 0;
+}
+
 
 int solve(int table[8][8],int moves[8][2],int temp_cor[8][2],int all_steps[63][10][2],int x,int y,int t){
 
