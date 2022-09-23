@@ -34,8 +34,13 @@ a következő formában:"x y".
 
 ## Algoritmus működése:
 
-Egy 2d tömbként ábrázolom a sakk táblát. '0'-val jelölöm azokat helyeket ahol még nem jártam. Ahova beléptem azt amezőt átirom az adott kör számára így
+Egy 2d tömbként ábrázolom a sakk táblát. '0'-val jelölöm azokat helyeket ahol még nem jártam. Ahova beléptem azt amezőt átírom az adott kör számára, így
 jól követhetó hogy melyik körben hova lépett.
 
+Minden körben megállapítjuk hogy melyek lehetnek a következő lépések. Ezeket a "temp_cor" tömbben tároljuk.
+Ezt követően megnézzük hogy ezekről a helyekről hova lehetne tovább lépni és ezt magszámoljuk a legkissebeket pedi eltároljuk.
+A következő körben pedig a legkissebek közül az elsőt kiválasztjuk és odalépünk. 
 
+Amennyiben nem lehet tovább lépni abban az esetben visszakeresükk azt a korábbi koordinátát ahol több lehetséges irányt tudtunk volna választani.
+Mivel korábban az első minimumot választottuk most a soron következőt fogjuk. Innen pedig tovább fut a program az eddigiek alapján.
 
